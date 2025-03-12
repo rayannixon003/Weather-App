@@ -1,0 +1,87 @@
+﻿@page "/login"
+@inject WeatherApp.Frontend.Services.AuthService AuthService
+@inject NavigationManager Navigation
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+
+    <div class="card login-card shadow-lg p-4 rounded">
+        <div class="text-center">
+            <h3 class="fw-bold">Welcome Back</h3>
+            <p class="text-muted">Sign in to your account</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="alert alert-danger text-center">@message</div>
+        }
+
+        <div class="mb-3 input-group">
+            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+            <input type="email" class="form-control" placeholder="Enter your email" @bind="email" required />
+        </div>
+
+        <div class="mb-3 input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" class="form-control" placeholder="Enter your password" @bind="password" required />
+        </div>
+
+        <button class="btn btn-primary w-100 login-btn" @onclick="LoginUser">Login</button>
+
+        <div class="text-center mt-3">
+            <p class="text-muted">
+                Don't have an account?
+                <a href="/register" class="text-decoration-none signup-link">Sign up</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string email = "";
+    private string password = "";
+    private string message = "";
+
+    private async Task LoginUser()
+    {
+        var session = await AuthService.LoginUser(email, password);
+        if (session != null)
+        {
+            message = "✅ Login successful!";
+            Navigation.NavigateTo("/weather");
+        }
+        else
+        {
+            message = "❌ Login failed! Check your email or password.";
+        }
+    }
+}
+
+<style>
+    body {
+        background: linear-gradient(to top, #a6d8ff, #00aaff);
+        color: #ffffff;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .login-card {
+        max-width: 400px;
+        width: 100%;
+        
+    }
+
+    .login-btn {
+        background-color: #007bff;
+        transition: background 0.3s ease-in-out;
+    }
+
+        
+
+    .signup-link {
+        color: #007bff;
+        font-weight: bold;
+        transition: color 0.3s ease-in-out;
+    }
+
+        
+</style>

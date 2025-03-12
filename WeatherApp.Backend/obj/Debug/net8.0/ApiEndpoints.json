@@ -1,0 +1,54 @@
+[
+  {
+    "ContainingType": "WeatherApp.Backend.Controllers.HistoricalWeatherController",
+    "Method": "GetHistoricalWeather",
+    "RelativePath": "api/historicalweather/get",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[WeatherApp.Backend.Models.HistoricalWeatherModel, WeatherApp.Backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WeatherApp.Backend.Controllers.HistoricalWeatherController",
+    "Method": "SaveHistoricalWeather",
+    "RelativePath": "api/historicalweather/save",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "weatherData",
+        "Type": "WeatherApp.Backend.Models.HistoricalWeatherModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WeatherApp.Backend.Controllers.WeatherController",
+    "Method": "GetWeather",
+    "RelativePath": "api/weather/get",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "city",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

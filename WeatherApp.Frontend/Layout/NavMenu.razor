@@ -1,0 +1,135 @@
+﻿@inherits LayoutComponentBase
+
+<!-- Top Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark top-navbar position-fixed w-100 top-0">
+    <div class="container-fluid">
+        <!-- Brand (Logo) -->
+        <a class="navbar-brand text-white ms-3" href="/">
+            <i class="bi bi-cloud-sun-fill"></i> WeatherApp
+        </a>
+
+        <!-- Profile Dropdown on the Right -->
+        
+    </div>
+</nav>
+
+<!-- Sidebar Navigation (Profile Section Removed) -->
+<nav class="sidebar position-fixed top-0 start-0 vh-100">
+    <div class="sidebar-container">
+        <ul class="nav flex-column w-100">
+            <li class="nav-item">
+                <a class="nav-link" href="/"><i class="bi bi-house-door"></i> Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/weather"><i class="bi bi-cloud"></i>Weather</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="content">
+    @Body
+</div>
+
+<!-- Custom Styles -->
+<style>
+    /* Top Navbar */
+    .top-navbar {
+        background: #ffffff00; /* Dark Black */
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0);
+        border-bottom: 1px solid rgba(255, 255, 255, 0);
+        height: 60px;
+        z-index: 1030;
+    }
+
+    .btn-black {
+        background-color: black;
+        color: rgba(255, 255, 255, 0.366);
+        border: none;
+    }
+
+        .btn-black:hover {
+            background-color: #222;
+        }
+
+    /* Sidebar */
+    .sidebar {
+        background: #ffffff78; /* Dark Black */
+        width: 220px; /* Adjusted width */
+        padding-top: 70px;
+        box-shadow: 4px 0 8px rgba(0, 0, 0, 0.5);
+        transition: width 0.3s ease-in-out;
+    }
+
+    .sidebar-container {
+        padding: 10px;
+    }
+
+    .sidebar .nav-link {
+        color: rgb(0, 0, 0);
+        padding: 12px 18px;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        font-size: 15px;
+        border-radius: 5px;
+        transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+    }
+
+        .sidebar .nav-link i {
+            margin-right: 12px;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+    /* Main Content */
+    .content {
+        margin-left: 220px;
+        padding: 80px 20px;
+        background-color: #ffffff00; /* Dark Background */
+        color: rgb(0, 0, 0);
+        min-height: 100vh;
+    }
+
+    /* Global Body Styling */
+    body {
+        background-color: #ffffff;
+        color: white;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    /* Dropdown menu */
+    .dropdown-menu {
+        background-color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .dropdown-item {
+        color: rgb(0, 0, 0);
+    }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+    /* Change navbar and sidebar icons to white */
+    .navbar-brand i,
+    .btn-black i,
+    .sidebar .nav-link i {
+        color: rgb(0, 0, 0) !important;
+    }
+
+</style>
+
+<!-- Bootstrap & Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

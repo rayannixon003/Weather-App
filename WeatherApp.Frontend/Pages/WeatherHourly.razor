@@ -1,0 +1,259 @@
+﻿@page "/hourly"
+@inject WeatherApp.Frontend.Services.WeatherService WeatherService
+@inject HttpClient Http
+
+@using WeatherApp.Frontend.Models
+@using WeatherApp.Frontend.Services
+
+<div class="container-fluid main-container">
+    <img src="/images/Backround.jpg" alt="Background" class="bg-image">
+
+    <div class="content-wrapper text-center">
+        <h1 class="text-white mt-3">🌤️ Hourly Weather</h1>
+
+        <!-- Enhanced Search Bar -->
+        <div class="input-group search-bar mx-auto mt-3">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input @bind="city" type="text" class="form-control" placeholder="Enter city name..." />
+            <button @onclick="FetchWeather" class="btn btn-primary">Get Weather</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <p class="text-danger mt-2">@errorMessage</p>
+        }
+
+        @if (isLoading)
+        {
+            <div class="d-flex justify-content-center mt-3">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        }
+
+        @if (weatherList.Any())
+        {
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-4">
+                    <label for="daySelect" class="form-label text-white"><b>Select a day:</b></label>
+                    <select id="daySelect" class="form-select" @bind="selectedDayIndex">
+                        @for (int i = 0; i < weatherList.Count; i++)
+                        {
+                            var date = DateTime.Parse(weatherList[i].First().Dt_txt).ToString("dddd, MMM d");
+                            <option value="@i">@date</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mt-4 hourly-forecast justify-content-center">
+                @foreach (var forecast in weatherList[selectedDayIndex])
+                {
+                    <div class="col-md-2 mb-4">
+                        <div class="card weather-hourly-card shadow-lg">
+                            <div class="card-header text-center">
+                                <h6 class="mb-0">@DateTime.Parse(forecast.Dt_txt).ToString("h:mm tt")</h6>
+                            </div>
+                            <div class="card-body text-center">
+                                <i class="@GetWeatherIcon(forecast.Weather.FirstOrDefault()?.Description)" style="font-size: 2rem; color: #FFD700;"></i>
+                                <h3 class="temp">@forecast.Main.Temp°C</h3>
+                                <p class="desc">@forecast.Weather.FirstOrDefault()?.Description</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<!-- CSS Styling -->
+<style>
+    .main-container {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+
+    .bg-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+    .content-wrapper {
+        position: relative;
+        padding-top: 50px;
+    }
+
+    /* Enhanced Search Bar */
+    .search-bar {
+        display: flex;
+        width: 100%;
+        max-width: 450px;
+        border-radius: 25px;
+        overflow: hidden;
+        border: 2px solid #FFD700;
+        background: rgba(30, 30, 30, 0.8);
+    }
+
+        .search-bar input {
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            outline: none;
+            background: transparent;
+            color: white;
+        }
+
+        .search-bar .btn {
+            background: #FFD700;
+            color: black;
+            font-weight: bold;
+            border-radius: 0 25px 25px 0;
+            transition: 0.3s ease-in-out;
+        }
+
+            .search-bar .btn:hover {
+                background: #ffcc00;
+            }
+
+    /* Weather Hourly Card */
+    .weather-hourly-card {
+        background: rgba(30, 30, 30, 0.8);
+        border-radius: 12px;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        /* Hover Effect */
+        .weather-hourly-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5); /* Soft golden glow */
+            background: rgba(40, 40, 40, 0.9);
+        }
+
+        .weather-hourly-card i {
+            font-size: 2rem;
+            color: white; /* Changed to white */
+        }
+
+    .main-container,
+    .content-wrapper,
+    .weather-hourly-card {
+        font-family: 'Poppins', sans-serif !important;
+    }
+
+
+
+    /* Temperature and Description Styling */
+    .temp {
+        color: #FFD700;
+        font-size: 1.5rem;
+    }
+
+    .desc {
+        font-size: 14px;
+        font-weight: bold;
+        color: #ddd;
+    }
+
+    /* Styled Dropdown */
+    .form-select {
+        background-color: #1e1e1e;
+        color: white;
+        border-radius: 8px;
+        padding: 10px;
+        border: 1px solid #555;
+        box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .form-select:hover,
+        .form-select:focus {
+            border-color: #FFD700;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+            outline: none;
+        }
+
+        /* Dropdown Options */
+        .form-select option {
+            background: #333;
+            color: white;
+            padding: 10px;
+        }
+</style>
+
+@code {
+    private string city = "";
+    private List<List<WeatherForecastItem>> weatherList = new();
+    private string errorMessage = string.Empty;
+    private bool isLoading = false;
+    private int selectedDayIndex = 0; // Default to first day
+
+    private async Task FetchWeather()
+    {
+        if (string.IsNullOrWhiteSpace(city) || city.Any(char.IsDigit))
+        {
+            errorMessage = "Please enter a valid city name.";
+            return;
+        }
+
+        isLoading = true;
+        try
+        {
+            var data = await WeatherService.GetWeatherAsync(city);
+            if (data != null && data.List.Any())
+            {
+                weatherList = data.List
+                    .GroupBy(forecast => DateTime.Parse(forecast.Dt_txt).Date)
+                    .Select(group => group.Take(6).ToList())
+                    .ToList();
+                selectedDayIndex = 0;
+                errorMessage = string.Empty;
+            }
+            else
+            {
+                errorMessage = "City not found or an error occurred.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error fetching data: " + ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private string GetWeatherIcon(string? mainWeather)
+    {
+        if (string.IsNullOrEmpty(mainWeather)) return "fa-solid fa-question-circle"; // Default icon
+
+        return mainWeather.ToLower() switch
+        {
+            "clear" => "fa-solid fa-sun",
+            "clouds" => "fa-solid fa-cloud",
+            "few clouds" => "fa-solid fa-cloud-sun",
+            "scattered clouds" => "fa-solid fa-cloud",
+            "broken clouds" => "fa-solid fa-cloud-meatball",
+            "overcast clouds" => "fa-solid fa-smog",
+            "drizzle" => "fa-solid fa-cloud-rain",
+            "rain" => "fa-solid fa-cloud-showers-heavy",
+            "thunderstorm" => "fa-solid fa-bolt",
+            "snow" => "fa-solid fa-snowflake",
+            "mist" => "fa-solid fa-smog",
+            "fog" => "fa-solid fa-smog",
+            _ => "fa-solid fa-cloud"
+        };
+    }
+
+}

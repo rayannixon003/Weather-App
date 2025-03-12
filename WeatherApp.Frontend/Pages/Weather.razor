@@ -1,0 +1,174 @@
+﻿@page "/weather"
+@inject WeatherApp.Frontend.Services.WeatherService WeatherService
+@inject HttpClient Http
+
+@using WeatherApp.Frontend.Models
+@using WeatherApp.Frontend.Services
+
+<div class="container-fluid main-container">
+    <div class="content-wrapper text-center">
+        <h1 class="text-white mt-3">Weather Forecast</h1>
+
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-6">
+                <div class="card search-card shadow-lg p-3">
+                    <div class="input-group">
+                        <input @bind="city" type="text" class="form-control" placeholder="Enter city name..." />
+                        <button @onclick="FetchWeather" class="btn btn-primary">Get Weather</button>
+                    </div>
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <p class="text-danger mt-2 text-center">@errorMessage</p>
+                    }
+                    @if (isLoading)
+                    {
+                        <div class="d-flex justify-content-center mt-3">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @if (weatherList.Any())
+        {
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-8">
+                    <div class="card weather-card text-white">
+                        <div class="card-header text-center">
+                            <h5><i class="bi bi-geo-alt-fill"></i> @weatherData.City.Name</h5>
+                            <button class="btn btn-warning mt-2" data-bs-toggle="collapse" data-bs-target="#weatherDetails">
+                                Toggle Forecast
+                            </button>
+                        </div>
+                        <div id="weatherDetails" class="collapse">
+                            <div class="card-body">
+                                @foreach (var forecast in weatherList)
+                                {
+                                    <div class="weather-item">
+                                        <h6 class="temp"><i class="bi bi-thermometer-half"></i> @forecast.Main.Temp°C</h6>
+                                        <p class="desc"><i class="bi bi-cloud-sun"></i> @forecast.Weather.FirstOrDefault()?.Description</p>
+                                        <p class="date"><i class="bi bi-calendar"></i> @GetDayName(forecast.Dt_txt)</p>
+                                    </div>
+                                    <hr class="divider" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    body {
+        background-image: url('/images/weather-bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+
+    .main-container {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+
+    .content-wrapper {
+        position: relative;
+        padding-top: 50px;
+    }
+
+    .search-card {
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(8px);
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .weather-card {
+        background: rgba(255, 255, 255, 0.332);
+        backdrop-filter: blur(6px);
+        border-radius: 10px;
+        text-align: center;
+        color: #fff;
+        padding: 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .weather-item {
+        margin-bottom: 10px;
+        padding: 5px;
+    }
+
+    .temp {
+        font-size: 18px;
+        font-weight: bold;
+        color: #ffd700;
+    }
+
+    .desc, .date {
+        font-size: 12px;
+        font-weight: bold;
+        color: #f8f9fa;
+    }
+
+    .divider {
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+    }
+</style>
+
+@code {
+    private string city = "";
+    private List<WeatherForecastItem> weatherList = new();
+    private string errorMessage = string.Empty;
+    private WeatherData weatherData = new();
+    private bool isLoading = false;
+
+    private async Task FetchWeather()
+    {
+        if (string.IsNullOrWhiteSpace(city) || city.Any(char.IsDigit))
+        {
+            errorMessage = "Please enter a valid city name.";
+            return;
+        }
+
+        isLoading = true;
+        try
+        {
+            var data = await WeatherService.GetWeatherAsync(city);
+            if (data != null && data.List.Any())
+            {
+                weatherData = data;
+                weatherList = weatherData.List
+                    .GroupBy(forecast => DateTime.Parse(forecast.Dt_txt).Date)
+                    .Select(group => group.First())
+                    .ToList();
+                errorMessage = string.Empty;
+            }
+            else
+            {
+                errorMessage = "City not found or an error occurred.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error fetching data: " + ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private string GetDayName(string dateTimeString)
+    {
+        return DateTime.TryParse(dateTimeString, out var dateTime) ? dateTime.ToString("dddd") : string.Empty;
+    }
+}

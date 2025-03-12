@@ -1,0 +1,109 @@
+﻿@page "/register"
+@inject WeatherApp.Frontend.Services.AuthService AuthService
+@inject NavigationManager Navigation
+
+<div class="container d-flex justify-content-center align-items-center vh-100"
+     style="background: url('/images/Login.jpg') no-repeat center center; background-size: cover;">
+    <div class="card register-card shadow-lg p-4 rounded">
+        <div class="text-center">
+            <h3 class="fw-bold">Create an Account</h3>
+            <p class="text-muted">Get started with a free account</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="alert alert-danger text-center">@message</div>
+        }
+
+        <div class="mb-3 input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input type="text" class="form-control" placeholder="Enter full name" @bind="name" required />
+        </div>
+
+        <div class="mb-3 input-group">
+            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+            <input type="email" class="form-control" placeholder="Enter email" @bind="email" required />
+        </div>
+
+        <div class="mb-3 input-group">
+            <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+            <input type="tel" class="form-control" placeholder="Enter phone number" @bind="phoneNumber" required />
+        </div>
+
+        <div class="mb-3 input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" class="form-control" placeholder="Enter password" @bind="password" required />
+        </div>
+
+        <div class="mb-3 input-group">
+            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+            <input type="password" class="form-control" placeholder="Confirm password" @bind="confirmPassword" required />
+        </div>
+
+        <button class="btn btn-success w-100 register-btn" @onclick="RegisterUser">Sign up</button>
+
+        <div class="text-center mt-3">
+            <p class="text-muted">
+                Already have an account?
+                <a href="/login" class="text-decoration-none signup-link">Sign in</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string name = "";
+    private string email = "";
+    private string phoneNumber = "";
+    private string password = "";
+    private string confirmPassword = "";
+    private string message = "";
+
+    private async Task RegisterUser()
+    {
+        if (password != confirmPassword)
+        {
+            message = "❌ Passwords do not match!";
+            return;
+        }
+
+        var result = await AuthService.RegisterUser(email, password, phoneNumber, name);
+        if (result != null && result.User != null)
+        {
+            message = "✅ Registration successful! A confirmation email has been sent.";
+            await Task.Delay(1500);
+            Navigation.NavigateTo("/login");
+        }
+        else
+        {
+            message = "❌ Registration failed! Try again.";
+        }
+    }
+}
+
+<style>
+    .register-card {
+        max-width: 400px;
+        width: 100%;
+        backdrop-filter: blur(5px);
+    }
+
+    .register-btn {
+        background-color: #28a745;
+        transition: background 0.3s ease-in-out;
+    }
+
+        .register-btn:hover {
+            background-color: #218838;
+        }
+
+    .signup-link {
+        color: #007bff;
+        font-weight: bold;
+        transition: color 0.3s ease-in-out;
+    }
+
+        .signup-link:hover {
+            color: #0056b3;
+        }
+</style>
