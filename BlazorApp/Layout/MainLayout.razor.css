@@ -1,0 +1,172 @@
+/* General Page Styles */
+.page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
+/* Header Styles */
+.header {
+    /*background-image: url('/rainbow1_clouds.jpg');*/ /* Ensure the image path is correct */
+    /*background-size: cover;*/
+    /*    background-repeat: no-repeat;
+    background-position: 0% 0;*/
+
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: moveBackground 20s linear infinite;
+}
+
+.glass-effect {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    /*    border-radius: 15px;*/
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes moveBackground {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 100% 0%;
+    }
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.navbar-brand a {
+    color: white;
+    font-size: 1.5rem;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 2rem;
+    transition: color 0.3s ease;
+}
+
+    .nav-menu a:hover {
+        color: #f0aa65; /*light orange on hover*/ /*#1abc9c; /* green color for theme toggle*/
+    }
+
+.theme-toggle .btn {
+    background-color: #154bb0; /*#1abc9c; green*/
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+    .theme-toggle .btn:hover {
+        background-color: #0b2c6b;
+    }
+
+/* Main Content Styles */
+main {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+    margin-top: auto;
+    font-size: 0.9rem;
+    height: 5rem;
+}
+
+    .footer a {
+        color: #032f82; /* #1abc9c; */
+        text-decoration: double;
+    }
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* Header and Footer */
+.header.glass-effect, .footer.glass-effect {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Dark Theme Styles */
+.dark-theme {
+    /*    background-color: #121212;*/
+    background-image: url("/heaven-5114501.jpg");
+    /*background-size: cover;*/ /* Ensure the image covers the entire background */
+    background-size: 150% 140%;
+    background-repeat: repeat-x; /* Repeat the image horizontally */
+    background-position: 0% 0;
+    animation: moveBackground 30s linear infinite; /* Apply the animation */
+    /*    color: #ffffff;*/
+}
+
+    .dark-theme .header {
+        /*background-image: url('/rainbow1_clouds.jpg');*/ /* Dark mode header image */
+        /*background-size: cover;
+        background-position: center;*/
+        animation: moveBackground 5s linear infinite; /* Add animation for dark mode */
+    }
+
+    .dark-theme .footer {
+        /*        background-color: #1a1a1a;*/
+        color: #000000;
+    }
+
+    .dark-theme .nav-menu a {
+/*        color: #ffffff;*/
+    }
+
+    .dark-theme .theme-toggle .btn {
+/*        background-color: #333;*/
+        color: #ffffff;
+    }
+
+    .dark-theme .auth-prompt {
+        color: #ffffff;
+    }
+
+    .dark-theme .dashboard-title {
+        color: white; /* Ensure dashboard h3 is white in dark theme */
+    }
+    .dark-theme h3 {
+        color: white; /* Ensure h3 headings are white in dark theme */
+    }
+

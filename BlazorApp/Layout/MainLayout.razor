@@ -1,0 +1,88 @@
+﻿@inherits LayoutComponentBase
+@inject Services.AuthService AuthService
+@inject NavigationManager NavigationManager
+
+<div class="page @themeClass">
+    <!-- Header -->
+    <header class="header glass-effect">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="/">Weather App</a>
+            </div>
+            <nav class="nav-menu">
+                <NavLink href="/" Match="NavLinkMatch.All">Home</NavLink>
+                @if (user != null)
+                {
+                    <NavLink href="/weather">Weather</NavLink>
+                    <NavLink href="/dashboard">Dashboard</NavLink>
+                    <button @onclick="Logout">Logout</button>
+                }
+                else
+                {
+                    <NavLink href="/dashboard">Dashboard</NavLink>
+                    <NavLink href="/login">Login</NavLink>
+                    <NavLink href="/signup">Sign Up</NavLink>
+                }
+            </nav>
+            <div class="theme-toggle">
+                <button class="btn btn-secondary" @onclick="ToggleTheme">
+                    @if (themeClass == "light-theme")
+                    {
+                        <span>🌙</span> 
+                    }
+                    else
+                    {
+                        <span>☀️</span> 
+                    }
+                    Change Theme
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            @Body
+        </div>
+    </main>
+
+    <!-- Footer -->
+    
+</div>
+
+@code {
+    private string themeClass = "light-theme";
+    private Supabase.Gotrue.User? user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await AuthService.GetUser();
+        AuthService.OnAuthStateChanged += RefreshState; // Subscribe to auth state changes
+    }
+
+    private void RefreshState()
+    {
+        InvokeAsync(async () =>
+        {
+            user = await AuthService.GetUser();
+            StateHasChanged(); // Force UI update
+        });
+    }
+
+    private void ToggleTheme()
+    {
+        themeClass = themeClass == "light-theme" ? "dark-theme" : "light-theme";
+    }
+
+    private async Task Logout()
+    {
+        await AuthService.SignOut();
+        NavigationManager.NavigateTo("/", forceLoad: true); // Force reload to update the UI
+    }
+
+    public void Dispose()
+    {
+        AuthService.OnAuthStateChanged -= RefreshState; // Unsubscribe on dispose
+    }
+}

@@ -1,0 +1,74 @@
+﻿@page "/dashboard"
+@inject BlazorApp.Services.GetWeatherService GetWeatherService
+
+<div class="container py-5">
+    <h2 class="text-center mb-5 fw-bold">Weather Dashboard</h2>
+
+    <div class="row">
+        <!-- Left: Cities -->
+        <div class="col-md-4">
+            <div class="d-flex flex-column gap-3">
+                @foreach (var city in topCities)
+                {
+                    <div class="card border-0 shadow rounded-4 text-center p-3">
+                        <h5 class="mb-3">@city</h5>
+                        <button class="btn btn-outline-primary" @onclick="() => FetchWeather(city)">Get Weather</button>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Right: Weather Info + Chart -->
+        <div class="col-md-8">
+            @if (weatherData is not null)
+            {
+                <div class="card border-0 shadow rounded-4 p-4 mb-4">
+                    <h4 class="text-primary">@weatherData!.Name</h4>
+                    <div class="row">
+                        <div class="col-6">
+                            <p><strong>🌡 Temp:</strong> @weatherData!.Temperature °C</p>
+                            <p><strong>💧 Humidity:</strong> @weatherData!.Humidity %</p>
+                            <p><strong>🌀 Wind:</strong> @weatherData!.Wind m/s</p>
+                            <p><strong>🔍 Visibility:</strong> @weatherData!.Visibility km</p>
+                        </div>
+                        <div class="col-6">
+                            <p><strong>📋 Weather:</strong> @weatherData!.Weather</p>
+                            <p><strong>📝 Desc:</strong> @weatherData!.Description</p>
+                            <p><strong>📈 Pressure:</strong> @weatherData!.Pressure hPa</p>
+                            <p><strong>🌅 Sunrise:</strong> @ConvertToDateTime(weatherData!.Sunrise)</p>
+                            <p><strong>🌇 Sunset:</strong> @ConvertToDateTime(weatherData!.Sunset)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Optional: Placeholder for Weather Chart -->
+                <div class="card border-0 shadow rounded-4 p-4 text-center">
+                    <h5 class="text-muted mb-3">📊 Temperature Trend</h5>
+                    <p>(Chart Coming Soon)</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@code {
+    
+    private List<string> topCities = new List<string> { "New York", "London", "Tokyo", "Paris", "Berlin" };
+    private BlazorApp.Services.WeatherData? weatherData;
+
+    private async Task FetchWeather(string city)
+    {
+        weatherData = await GetWeatherService.GetWeatherAsync(city);
+    }
+
+    private string ConvertToDateTime(long timestamp)
+    {
+        return DateTimeOffset.FromUnixTimeSeconds(timestamp).ToLocalTime().ToString("HH:mm:ss");
+    }
+    
+
+}
+
+    
+}

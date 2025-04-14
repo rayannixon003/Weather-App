@@ -1,0 +1,12 @@
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\bin\Debug\net8.0\BlazorApp.Shared.deps.json
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\bin\Debug\net8.0\BlazorApp.Shared.dll
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\bin\Debug\net8.0\BlazorApp.Shared.pdb
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\obj\Debug\net8.0\BlazorApp.Shared.csproj.AssemblyReference.cache
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\obj\Debug\net8.0\BlazorApp.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\obj\Debug\net8.0\BlazorApp.Shared.AssemblyInfoInputs.cache
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\obj\Debug\net8.0\BlazorApp.Shared.AssemblyInfo.cs
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\obj\Debug\net8.0\BlazorApp.Shared.csproj.CoreCompileInputs.cache
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\obj\Debug\net8.0\BlazorApp.Shared.dll
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\obj\Debug\net8.0\refint\BlazorApp.Shared.dll
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\obj\Debug\net8.0\BlazorApp.Shared.pdb
+C:\Users\rayan\Downloads\WiseWork-Blazor-WeatherForecast-App-master\WiseWork-Blazor-WeatherForecast-App-master\BlazorApp.Shared\obj\Debug\net8.0\ref\BlazorApp.Shared.dll
